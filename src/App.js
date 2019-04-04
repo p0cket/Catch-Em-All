@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Form from './components/Form';
 
 class App extends Component {
+  state = {
+    poke: {}
+  }
+
+  getPokemon = async (e) => {
+    e.preventDefault();
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/ditto`);
+    const data = await res.json();
+    console.log(data);
+    this.setState({ poke : data });
+    //this.setState({ poke : e.target.elements.pokemonName.value });
+
+  }
+
   render() {
+    const {sprites, title} = this.state.poke;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Form getPokemon={this.getPokemon} />
+          Hello warld {sprites && <img src={sprites.front_default} alt={title} />}
       </div>
     );
   }
